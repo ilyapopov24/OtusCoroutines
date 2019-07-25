@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="songsTable"
+            type="ru.hetfieldan24.otuscoroutines.database.SongsTable"/>
+        <variable
+            name="songsViewModel"
+            type="ru.hetfieldan24.otuscoroutines.viewmodel.SongsViewModel"/>
+        <import type="android.view.View"/>
+    </data>
+
+    <RelativeLayout
+            android:id="@+id/layoutForPaddings"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+            android:background="@color/grey">
+
+        <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewForCorners"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="10dp">
+
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/songsCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="10dp">
+
+                <RelativeLayout
+                        android:id="@+id/mainLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    <ImageView
+                            android:id="@+id/songImage"
+                            android:layout_width="96dp"
+                            android:layout_height="96dp"
+                            android:contentDescription="@string/empty_img"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentStart="true"
+                            app:imageUrl="@{ songsTable.imageUrl }"
+                            android:layout_marginStart="8dp"/>
+
+                    <TextView
+                            android:id="@+id/songName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@id/songImage"
+                            android:layout_centerVertical="true"
+                            android:text="@{ songsTable.songName }"
+                            android:layout_marginStart="8dp"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="18sp"/>
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+</layout>
