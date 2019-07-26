@@ -1,25 +1,22 @@
 package ru.hetfieldan24.otuscoroutines.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.room.Room
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import ru.hetfieldan24.otuscoroutines.viewmodel.SongsViewModelFactory
+import com.google.gson.Gson
 import ru.hetfieldan24.otuscoroutines.R
-import ru.hetfieldan24.otuscoroutines.database.SongsDatabase
+import ru.hetfieldan24.otuscoroutines.TEST
 import ru.hetfieldan24.otuscoroutines.databinding.FragmentMainBinding
-import ru.hetfieldan24.otuscoroutines.repo.DBDataSource
-import ru.hetfieldan24.otuscoroutines.repo.RemoteDataSource
+import ru.hetfieldan24.otuscoroutines.myLog
 import ru.hetfieldan24.otuscoroutines.viewmodel.SongsViewModel
+import ru.hetfieldan24.otuscoroutines.viewmodel.SongsViewModelFactory
 
 class MainFragment: Fragment() {
 
@@ -45,14 +42,43 @@ class MainFragment: Fragment() {
         val adapter = SongsListAdapter(songsViewModel)
         binding.songsRecyclerView.adapter = adapter
 
-        songsViewModel.songs.observe(viewLifecycleOwner, Observer {
+        songsViewModel.songsFromDB.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Log.e("ADAPTER", "SUBMIT")
                 adapter.submitList(it.toList())
+            }
+        })
+
+        songsViewModel.songsFromRemote.observe(viewLifecycleOwner, Observer {
+            it?.let {
                 songsViewModel.cacheSongs(it.toList())
             }
         })
-        songsViewModel.loadSongs()
+
+        songsViewModel.isLoading.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                binding.refreshButtonDefault.visibility = View.GONE
+                binding.refreshButtonLoading.visibility = View.VISIBLE
+            } else {
+                binding.refreshButtonDefault.visibility = View.VISIBLE
+                binding.refreshButtonLoading.visibility = View.GONE
+            }
+        })
+
+        songsViewModel.onSongClicked.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                val fragment = SongFragment()
+                val args = Bundle()
+                args.putString(TEST, Gson().toJson(it))
+                fragment.arguments = args
+
+                requireActivity().supportFragmentManager.commit {
+                    add(R.id.container, fragment)
+                    hide(this@MainFragment)
+                    addToBackStack(null)
+                }
+            }
+        })
+
         return binding.root
     }
 }

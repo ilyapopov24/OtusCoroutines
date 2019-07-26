@@ -1,11 +1,10 @@
 package ru.hetfieldan24.otuscoroutines.view
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.hetfieldan24.otuscoroutines.database.SongsTable
 import ru.hetfieldan24.otuscoroutines.databinding.ItemSongsListBinding

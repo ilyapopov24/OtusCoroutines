@@ -1,16 +1,15 @@
 package ru.hetfieldan24.otuscoroutines.repo
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.hetfieldan24.otuscoroutines.database.SongsTable
 import ru.hetfieldan24.otuscoroutines.model.SongsResponse
 import ru.hetfieldan24.otuscoroutines.network.RetrofitService
 
-class RemoteDataSource: DataSource {
+class RemoteDataSource private constructor(){
     private var retrofitService: RetrofitService = RetrofitService.getInstance()
 
-    override suspend fun loadSongs(): LiveData<List<SongsTable>>
+    suspend fun loadSongs(): LiveData<List<SongsTable>>
     {
         val response = retrofitService.getJSONApi().getSongsResponse().await()
         return parseSongsResponse(response)
@@ -24,12 +23,11 @@ class RemoteDataSource: DataSource {
         songs?.let { songsList ->
             val parsedSongsList = List(songsList.size) { songIndex ->
                 SongsTable(
-                    songId = songIndex.toLong(),
-                    songGenre = songsResponse.genre,
-                    songName = songs[songIndex].songName,
+                    songGenre = "Жанр: " + songsResponse.genre,
+                    songName = "Песня: " + songs[songIndex].songName,
                     imageUrl = songs[songIndex].imageUrl,
-                    songSubGenre = songs[songIndex].subGenre?.name,
-                    userName = songs[songIndex].userName
+                    songSubGenre = "Поджанр: " + songs[songIndex].subGenre?.name,
+                    userName = "Загружено пользователем " + songs[songIndex].userName
                 )
             }
             liveData.postValue(parsedSongsList)

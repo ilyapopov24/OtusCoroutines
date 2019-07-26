@@ -1,26 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
-            name="songsViewModel"
-            type="ru.hetfieldan24.otuscoroutines.viewmodel.SongsViewModel" />
+                name="songsViewModel"
+                type="ru.hetfieldan24.otuscoroutines.viewmodel.SongsViewModel" />
+        <import type="android.view.View"/>
     </data>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/grey">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/songsRecyclerView"
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_marginTop="8dp"/>
+            android:background="@color/grey"
+            android:orientation="vertical">
 
-    </RelativeLayout>
+        <Button
+                android:id="@+id/refreshButtonDefault"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/refresh_songs_list"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:onClick="@{ () -> songsViewModel.loadSongs() }"/>
+
+        <Button
+                android:id="@+id/refreshButtonLoading"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/loading"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:visibility="gone"
+                android:enabled="false"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/songsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_marginTop="10dp"/>
+
+    </LinearLayout>
 
 </layout>

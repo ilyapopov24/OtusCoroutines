@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+                name="songsTable"
+                type="ru.hetfieldan24.otuscoroutines.database.SongsTable"/>
+    </data>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary">
+
+    <LinearLayout
+            android:id="@+id/mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+        <ImageView
+                android:id="@+id/songImage"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:contentDescription="@string/empty_img"
+                app:imageUrl="@{ songsTable.imageUrl }"/>
+
+        <TextView
+                android:id="@+id/songName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{ songsTable.songName }"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:gravity="start"/>
+
+        <TextView
+                android:id="@+id/songGenre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{ songsTable.songGenre }"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:gravity="start"
+                android:layout_marginTop="8dp"/>
+
+        <TextView
+                android:id="@+id/songSubGenre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{ songsTable.songSubGenre }"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:gravity="start"
+                android:layout_marginTop="8dp"/>
+
+        <TextView
+                android:id="@+id/userName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{ songsTable.userName }"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:gravity="start"
+                android:layout_marginTop="8dp"/>
+
+    </LinearLayout>
+
+    </ScrollView>
+
+</layout>

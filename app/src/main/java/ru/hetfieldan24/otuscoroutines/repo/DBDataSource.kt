@@ -1,17 +1,14 @@
 package ru.hetfieldan24.otuscoroutines.repo
 
 import android.app.Application
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.room.Room
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.hetfieldan24.otuscoroutines.database.SongsDao
 import ru.hetfieldan24.otuscoroutines.database.SongsDatabase
 import ru.hetfieldan24.otuscoroutines.database.SongsTable
 
-class DBDataSource(application: Application): DataSource {
+class DBDataSource private constructor(application: Application) {
     private val dao: SongsDao
 
     init {
@@ -19,18 +16,13 @@ class DBDataSource(application: Application): DataSource {
         dao = db.songsDao
     }
 
-    override suspend fun loadSongs(): LiveData<List<SongsTable>> {
-        return withContext(Dispatchers.IO) {
-            val songs = dao.getAllSongs()
-            Log.e("ADAPTER", "songs from DB Data Source: ${songs.value}")
-            songs
-        }
+    fun getAllSongs(): LiveData<List<SongsTable>> {
+        return dao.getAllSongs()
     }
 
-    suspend fun insertSong(songTable: SongsTable) {
+    suspend fun insertSongs(songs: List<SongsTable>) {
         withContext(Dispatchers.IO) {
-            Log.e("ADAPTER", "insertSong: $songTable")
-            dao.insert(songTable)
+            dao.insertAll(songs)
         }
     }
 
@@ -45,7 +37,7 @@ class DBDataSource(application: Application): DataSource {
             dao.clear()
         }
     }
-    /*
+
     companion object {
         @Volatile
         private var INSTANCE: DBDataSource? = null
@@ -62,5 +54,4 @@ class DBDataSource(application: Application): DataSource {
             }
         }
     }
-    */
 }

@@ -3,7 +3,6 @@ package ru.hetfieldan24.otuscoroutines.viewmodel
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import ru.hetfieldan24.otuscoroutines.viewmodel.SongsViewModel
 
 class SongsViewModelFactory(
         private val application: Application) : ViewModelProvider.Factory

@@ -1,50 +1,31 @@
 package ru.hetfieldan24.otuscoroutines.repo
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.hetfieldan24.otuscoroutines.database.SongsTable
 
-class Repo(application: Application): DataSource {
+class Repo(application: Application) {
     private val remoteDataSource = RemoteDataSource.getInstance()
-    private val dbDataSource = DBDataSource(application)
-    private val songs: LiveData<List<SongsTable>>
+    private val dbDataSource = DBDataSource.getInstance(application)
 
-    init {
-        songs = dbDataSource.loadSongs()
-    }
+    private val songsFromDB = dbDataSource.getAllSongs()
 
-    override suspend fun loadSongs(): LiveData<List<SongsTable>> {
-        return withContext(Dispatchers.IO)
-        {
+    suspend fun loadSongsFromRemote(): LiveData<List<SongsTable>> {
+        return withContext(Dispatchers.IO) {
             remoteDataSource.loadSongs()
         }
     }
 
+    fun getSongsFromDB(): LiveData<List<SongsTable>> = songsFromDB
+
     suspend fun cacheSongs(songs: List<SongsTable>?) {
-        Log.e("ADAPTER", "cacheSongs: $songs")
-
         songs?.let {
-            clearDB()
-            songs.forEach { song ->
-                insertSongToDB(song)
+            withContext(Dispatchers.IO) {
+                dbDataSource.clearDB()
+                dbDataSource.insertSongs(songs)
             }
-        }
-        val songsFromDB = dbDataSource.loadSongs()
-        Log.e("ADAPTER", "songsFromDB: ${songsFromDB.value.toString()}")
-    }
-
-    private suspend fun insertSongToDB(song: SongsTable) {
-        withContext(Dispatchers.IO) {
-            dbDataSource.insertSong(song)
-        }
-    }
-
-    private suspend fun clearDB() {
-        withContext(Dispatchers.IO) {
-            dbDataSource.clearDB()
         }
     }
 }

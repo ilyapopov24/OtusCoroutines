@@ -10,7 +10,7 @@ import androidx.room.Update
 interface SongsDao
 {
     @Insert
-    fun insert(songs: SongsTable)
+    fun insertAll(songs: List<SongsTable>)
 
     @Update
     fun update(songs: SongsTable)
